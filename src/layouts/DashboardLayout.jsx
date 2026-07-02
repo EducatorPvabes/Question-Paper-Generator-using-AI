@@ -1,19 +1,21 @@
+import { Box } from "@mui/material";
 
-import { Outlet } from "react-router-dom";
+import Navbar from "../components/layout/Navbar";
+import Sidebar from "../components/layout/Sidebar";
 
-const DashboardLayout = () => {
+const DashboardLayout = ({ children }) => {
   return (
-    <div>
-      {/* Navbar */}
+    <Box sx={{ display: "flex" }}>
+      <Sidebar />
 
-      {/* Sidebar */}
+      <Box sx={{ flexGrow: 1 }}>
+        <Navbar />
 
-      <main>
-        <Outlet />
-      </main>
-
-      {/* Footer */}
-    </div>
+        <Box sx={{ p: 3 }}>
+          {children}
+        </Box>
+      </Box>
+    </Box>
   );
 };
 
