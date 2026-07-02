@@ -1,29 +1,59 @@
 import {
-  Box,
+  Drawer,
   Toolbar,
+  List,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
   Typography,
 } from "@mui/material";
 
+import { Link, useLocation } from "react-router-dom";
+
+import { menuItems } from "../../utils/menuItems";
+
+const drawerWidth = 250;
+
 const Sidebar = () => {
+  const location = useLocation();
+
   return (
-    <Box
+    <Drawer
+      variant="permanent"
       sx={{
-        width: 250,
-        minHeight: "100vh",
-        bgcolor: "primary.main",
-        color: "#fff",
+        width: drawerWidth,
+        "& .MuiDrawer-paper": {
+          width: drawerWidth,
+          boxSizing: "border-box",
+        },
       }}
     >
-      <Toolbar />
+      <Toolbar>
+        <Typography
+          variant="h6"
+          fontWeight="bold"
+        >
+          AI QPG
+        </Typography>
+      </Toolbar>
 
-      <Typography
-        variant="h6"
-        align="center"
-        mt={3}
-      >
-        AI Question Paper
-      </Typography>
-    </Box>
+      <List>
+        {menuItems.map((item) => (
+          <ListItemButton
+            key={item.title}
+            component={Link}
+            to={item.path}
+            selected={location.pathname === item.path}
+          >
+            <ListItemIcon>{item.icon}</ListItemIcon>
+
+            <ListItemText
+              primary={item.title}
+            />
+          </ListItemButton>
+        ))}
+      </List>
+    </Drawer>
   );
 };
 

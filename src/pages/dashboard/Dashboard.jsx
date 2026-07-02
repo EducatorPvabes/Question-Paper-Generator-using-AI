@@ -11,7 +11,33 @@ import BusinessIcon from "@mui/icons-material/Business";
 import DescriptionIcon from "@mui/icons-material/Description";
 
 import StatCard from "../../components/dashboard/StatCard";
+import { Paper } from "@mui/material";
 
+import BarChart from "../../components/dashboard/BarChart";
+import PieChart from "../../components/dashboard/PieChart";
+import RecentUsers from "../../components/dashboard/RecentUsers";
+import RecentActivity from "../../components/dashboard/RecentActivity";
+<Grid container spacing={3} mt={2}>
+  <Grid item xs={12} md={8}>
+    <Paper sx={{ p: 2 }}>
+      <BarChart />
+    </Paper>
+  </Grid>
+
+  <Grid item xs={12} md={4}>
+    <Paper sx={{ p: 2 }}>
+      <PieChart />
+    </Paper>
+  </Grid>
+
+  <Grid item xs={12} md={6}>
+    <RecentUsers />
+  </Grid>
+
+  <Grid item xs={12} md={6}>
+    <RecentActivity />
+  </Grid>
+</Grid>
 const Dashboard = () => {
   return (
     <DashboardLayout>
