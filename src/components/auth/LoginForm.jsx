@@ -14,8 +14,10 @@ import {
 
 import { toast } from "react-toastify";
 
+import useAuth from "../../hooks/useAuth";
 import PasswordField from "./PasswordField";
 import { loginUser } from "../../services/authService";
+
 import {
   emailValidation,
   passwordValidation,
@@ -23,6 +25,9 @@ import {
 
 const LoginForm = () => {
   const navigate = useNavigate();
+
+  // AuthContext
+  const { login } = useAuth();
 
   const [loading, setLoading] = useState(false);
 
@@ -43,9 +48,8 @@ const LoginForm = () => {
     try {
       const response = await loginUser(data);
 
-      // Temporary Local Storage
-      localStorage.setItem("token", response.token);
-      localStorage.setItem("user", JSON.stringify(response.user));
+      // Context handles LocalStorage + State
+      login(response.token, response.user);
 
       toast.success("Login Successful 🎉");
 

@@ -1,4 +1,5 @@
 import { useState } from "react";
+
 import {
   TextField,
   IconButton,
@@ -9,17 +10,13 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 const PasswordField = ({
-  label = "Password",
+  label,
   register,
   name,
   errors,
-  validation = {},
+  validation,
 }) => {
   const [showPassword, setShowPassword] = useState(false);
-
-  const handleTogglePassword = () => {
-    setShowPassword((prev) => !prev);
-  };
 
   return (
     <TextField
@@ -30,16 +27,12 @@ const PasswordField = ({
       {...register(name, validation)}
       error={!!errors[name]}
       helperText={errors[name]?.message}
-      autoComplete="current-password"
       InputProps={{
         endAdornment: (
           <InputAdornment position="end">
             <IconButton
-              onClick={handleTogglePassword}
               edge="end"
-              aria-label={
-                showPassword ? "Hide Password" : "Show Password"
-              }
+              onClick={() => setShowPassword(!showPassword)}
             >
               {showPassword ? (
                 <VisibilityOff />
