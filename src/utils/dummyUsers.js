@@ -1,0 +1,38 @@
+export const dummyUsers = [
+  {
+    id: 1,
+    name: "Administrator",
+    email: "admin@gmail.com",
+    department: "Computer Science",
+    designation: "Admin",
+    role: "Admin",
+    status: "Active",
+  },
+  {
+    id: 2,
+    name: "Rahul Sharma",
+    email: "rahul@gmail.com",
+    department: "Computer Science",
+    designation: "Assistant Professor",
+    role: "Faculty",
+    status: "Active",
+  },
+  {
+    id: 3,
+    name: "Sneha Singh",
+    email: "sneha@gmail.com",
+    department: "IT",
+    designation: "Associate Professor",
+    role: "Faculty",
+    status: "Inactive",
+  },
+  {
+    id: 4,
+    name: "Aman Gupta",
+    email: "aman@gmail.com",
+    department: "ECE",
+    designation: "HOD",
+    role: "HOD",
+    status: "Active",
+  },
+];
