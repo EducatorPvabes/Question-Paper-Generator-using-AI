@@ -1,20 +1,22 @@
+import { useEffect, useState } from "react";
+
 import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
   Button,
-  TextField,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   MenuItem,
+  TextField,
 } from "@mui/material";
 
-import { useState, useEffect } from "react";
-
-const roles = [
-  "Admin",
-  "Faculty",
-  "HOD",
-];
+const initialState = {
+  name: "",
+  email: "",
+  department: "",
+  role: "Faculty",
+  status: "Active",
+};
 
 const UserDialog = ({
   open,
@@ -22,19 +24,15 @@ const UserDialog = ({
   onSave,
   editingUser,
 }) => {
-  const [user, setUser] = useState({
-    name: "",
-    email: "",
-    department: "",
-    role: "Faculty",
-    status: "Active",
-  });
+  const [user, setUser] = useState(initialState);
 
   useEffect(() => {
     if (editingUser) {
       setUser(editingUser);
+    } else {
+      setUser(initialState);
     }
-  }, [editingUser]);
+  }, [editingUser, open]);
 
   const handleChange = (e) => {
     setUser({
@@ -44,34 +42,30 @@ const UserDialog = ({
   };
 
   const handleSubmit = () => {
+    if (
+      !user.name ||
+      !user.email ||
+      !user.department
+    ) {
+      return;
+    }
+
     onSave(user);
-
     handleClose();
-
-    setUser({
-      name: "",
-      email: "",
-      department: "",
-      role: "Faculty",
-      status: "Active",
-    });
   };
 
   return (
     <Dialog
       open={open}
       onClose={handleClose}
-      maxWidth="sm"
       fullWidth
+      maxWidth="sm"
     >
       <DialogTitle>
-        {editingUser
-          ? "Edit User"
-          : "Add User"}
+        {editingUser ? "Edit User" : "Add User"}
       </DialogTitle>
 
       <DialogContent>
-
         <TextField
           fullWidth
           margin="normal"
@@ -108,23 +102,27 @@ const UserDialog = ({
           value={user.role}
           onChange={handleChange}
         >
-          {roles.map((role) => (
-            <MenuItem
-              key={role}
-              value={role}
-            >
-              {role}
-            </MenuItem>
-          ))}
+          <MenuItem value="Admin">Admin</MenuItem>
+          <MenuItem value="Faculty">Faculty</MenuItem>
+          <MenuItem value="HOD">HOD</MenuItem>
         </TextField>
 
+        <TextField
+          select
+          fullWidth
+          margin="normal"
+          label="Status"
+          name="status"
+          value={user.status}
+          onChange={handleChange}
+        >
+          <MenuItem value="Active">Active</MenuItem>
+          <MenuItem value="Inactive">Inactive</MenuItem>
+        </TextField>
       </DialogContent>
 
       <DialogActions>
-
-        <Button
-          onClick={handleClose}
-        >
+        <Button onClick={handleClose}>
           Cancel
         </Button>
 
@@ -132,11 +130,9 @@ const UserDialog = ({
           variant="contained"
           onClick={handleSubmit}
         >
-          Save
+          {editingUser ? "Update" : "Save"}
         </Button>
-
       </DialogActions>
-
     </Dialog>
   );
 };

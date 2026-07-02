@@ -10,6 +10,7 @@ import AddIcon from "@mui/icons-material/Add";
 const UserToolbar = ({
   search,
   setSearch,
+    onAddUser,
 }) => {
   return (
     <Box
@@ -52,6 +53,7 @@ const UserToolbar = ({
       <Button
         variant="contained"
         startIcon={<AddIcon />}
+        onClick={onAddUser}
       >
         Add User
       </Button>

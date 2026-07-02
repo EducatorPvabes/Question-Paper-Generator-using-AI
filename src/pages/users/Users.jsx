@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+
 import { Typography, Paper } from "@mui/material";
 import { toast } from "react-toastify";
 
@@ -21,7 +22,7 @@ const Users = () => {
   const [deleteDialog, setDeleteDialog] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
 
-  // Load Users
+  // Load users
   useEffect(() => {
     const storedUsers = JSON.parse(localStorage.getItem("users"));
 
@@ -32,14 +33,25 @@ const Users = () => {
     }
   }, []);
 
-  // Save Users
+  // Save users
   useEffect(() => {
     localStorage.setItem("users", JSON.stringify(users));
   }, [users]);
 
-  // Open Add Dialog
+  // Search
+  const filteredUsers = users.filter((user) =>
+    user.name.toLowerCase().includes(search.toLowerCase())
+  );
+
+  // Add User
   const handleOpenDialog = () => {
     setEditingUser(null);
+    setOpenDialog(true);
+  };
+
+  // Edit User
+  const handleEditUser = (user) => {
+    setEditingUser(user);
     setOpenDialog(true);
   };
 
@@ -48,15 +60,12 @@ const Users = () => {
     setOpenDialog(false);
   };
 
-  // Save User (Add / Edit)
+  // Save User
   const handleSaveUser = (user) => {
     if (editingUser) {
       const updatedUsers = users.map((u) =>
         u.id === editingUser.id
-          ? {
-              ...user,
-              id: editingUser.id,
-            }
+          ? { ...user, id: editingUser.id }
           : u
       );
 
@@ -74,16 +83,11 @@ const Users = () => {
       toast.success("User Added Successfully");
     }
 
+    setOpenDialog(false);
     setEditingUser(null);
   };
 
-  // Edit
-  const handleEditUser = (user) => {
-    setEditingUser(user);
-    setOpenDialog(true);
-  };
-
-  // Open Delete Dialog
+  // Delete Dialog
   const handleDeleteDialog = (user) => {
     setSelectedUser(user);
     setDeleteDialog(true);
@@ -103,14 +107,13 @@ const Users = () => {
     setSelectedUser(null);
   };
 
-  // Search
-  const filteredUsers = users.filter((user) =>
-    user.name.toLowerCase().includes(search.toLowerCase())
-  );
-
   return (
     <DashboardLayout>
-      <Typography variant="h4" fontWeight="bold" mb={3}>
+      <Typography
+        variant="h4"
+        fontWeight="bold"
+        mb={3}
+      >
         User Management
       </Typography>
 
@@ -120,7 +123,12 @@ const Users = () => {
         onAddUser={handleOpenDialog}
       />
 
-      <Paper sx={{ p: 2, height: 520 }}>
+      <Paper
+        sx={{
+          p: 2,
+          height: 550,
+        }}
+      >
         <UserTable
           rows={filteredUsers}
           onEdit={handleEditUser}

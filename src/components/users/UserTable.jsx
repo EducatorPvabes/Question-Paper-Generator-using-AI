@@ -1,5 +1,4 @@
 import { DataGrid } from "@mui/x-data-grid";
-import StatusChip from "./StatusChip";
 
 import {
   IconButton,
@@ -8,68 +7,69 @@ import {
 
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-const columns = [
-  {
-    field: "id",
-    headerName: "ID",
-    width: 70,
-  },
 
-  {
-    field: "name",
-    headerName: "Name",
-    flex: 1,
-  },
+import StatusChip from "./StatusChip";
 
-  {
-    field: "email",
-    headerName: "Email",
-    flex: 1.3,
-  },
+const UserTable = ({
+  rows,
+  onEdit,
+  onDelete,
+}) => {
+  const columns = [
+    {
+      field: "name",
+      headerName: "Name",
+      flex: 1,
+    },
+    {
+      field: "email",
+      headerName: "Email",
+      flex: 1.4,
+    },
+    {
+      field: "department",
+      headerName: "Department",
+      flex: 1,
+    },
+    {
+      field: "role",
+      headerName: "Role",
+      flex: 1,
+    },
+    {
+      field: "status",
+      headerName: "Status",
+      flex: 1,
+      renderCell: (params) => (
+        <StatusChip status={params.value} />
+      ),
+    },
+    {
+      field: "actions",
+      headerName: "Actions",
+      width: 140,
+      sortable: false,
 
-  {
-    field: "department",
-    headerName: "Department",
-    flex: 1,
-  },
+      renderCell: (params) => (
+        <Stack direction="row">
+          <IconButton
+            color="primary"
+            onClick={() => onEdit(params.row)}
+          >
+            <EditIcon />
+          </IconButton>
 
-  {
-    field: "role",
-    headerName: "Role",
-    width: 120,
-  },
+          <IconButton
+            color="error"
+            onClick={() => onDelete(params.row)}
+          >
+            <DeleteIcon />
+          </IconButton>
+        </Stack>
+      ),
+    },
+  ];
 
-  {
-    field: "status",
-    headerName: "Status",
-    width: 120,
-    renderCell: (params) => (
-      <StatusChip status={params.value} />
-    ),
-  },
-
-  {
-    field: "actions",
-    headerName: "Actions",
-    width: 130,
-
-    sortable: false,
-
-    renderCell: () => (
-      <Stack direction="row">
-        <IconButton color="primary">
-          <EditIcon />
-        </IconButton>
-
-        <IconButton color="error">
-          <DeleteIcon />
-        </IconButton>
-      </Stack>
-    ),
-  },
-];
-
-const UserTable = ({ rows }) => {
   return (
     <DataGrid
       rows={rows}

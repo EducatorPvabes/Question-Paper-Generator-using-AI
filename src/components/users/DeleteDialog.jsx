@@ -1,8 +1,10 @@
 import {
-  Dialog,
-  DialogTitle,
-  DialogActions,
   Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
 } from "@mui/material";
 
 const DeleteDialog = ({
@@ -14,27 +16,36 @@ const DeleteDialog = ({
     <Dialog
       open={open}
       onClose={handleClose}
+      maxWidth="xs"
+      fullWidth
     >
       <DialogTitle>
-        Delete this user?
+        Delete User
       </DialogTitle>
 
-      <DialogActions>
+      <DialogContent>
+        <DialogContentText>
+          Are you sure you want to delete this user?
+          <br />
+          This action cannot be undone.
+        </DialogContentText>
+      </DialogContent>
 
-        <Button onClick={handleClose}>
+      <DialogActions>
+        <Button
+          onClick={handleClose}
+        >
           Cancel
         </Button>
 
         <Button
-          color="error"
           variant="contained"
+          color="error"
           onClick={onDelete}
         >
           Delete
         </Button>
-
       </DialogActions>
-
     </Dialog>
   );
 };

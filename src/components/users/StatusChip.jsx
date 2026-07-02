@@ -4,9 +4,12 @@ const StatusChip = ({ status }) => {
   return (
     <Chip
       label={status}
-      color={status === "Active" ? "success" : "error"}
+      color={
+        status === "Active"
+          ? "success"
+          : "error"
+      }
       size="small"
-      variant="filled"
     />
   );
 };
