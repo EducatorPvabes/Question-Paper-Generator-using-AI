@@ -1,8 +1,8 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-
+import QuestionBank from "./pages/questionBank/QuestionBank";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import PublicRoute from "./routes/PublicRoute";
-
+import GeneratePaper from "./pages/questionPaper/GeneratePaper";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import ForgetPassword from "./pages/auth/ForgetPassword";
@@ -66,6 +66,14 @@ function App() {
           </ProtectedRoute>
         }
       />
+      <Route
+  path="/generate-paper"
+  element={
+    <ProtectedRoute>
+      <GeneratePaper />
+    </ProtectedRoute>
+  }
+/>
 
       <Route
         path="/users"
@@ -75,6 +83,14 @@ function App() {
           </ProtectedRoute>
         }
       />
+      <Route
+  path="/question-bank"
+  element={
+    <ProtectedRoute>
+      <QuestionBank />
+    </ProtectedRoute>
+  }
+/>
 
       <Route
         path="/profile"

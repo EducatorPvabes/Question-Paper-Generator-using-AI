@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-
 import { Typography, Paper } from "@mui/material";
 import { toast } from "react-toastify";
 
@@ -10,7 +9,12 @@ import UserTable from "../../components/users/UserTable";
 import UserDialog from "../../components/users/UserDialog";
 import DeleteDialog from "../../components/users/DeleteDialog";
 
-import { dummyUsers } from "../../utils/dummyUsers";
+import {
+  fetchUsers,
+  createUser,
+  editUser,
+  removeUser,
+} from "../../services/userService";
 
 const Users = () => {
   const [users, setUsers] = useState([]);
@@ -22,25 +26,21 @@ const Users = () => {
   const [deleteDialog, setDeleteDialog] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
 
-  // Load users
+  // Load Users
   useEffect(() => {
-    const storedUsers = JSON.parse(localStorage.getItem("users"));
-
-    if (storedUsers) {
-      setUsers(storedUsers);
-    } else {
-      setUsers(dummyUsers);
-    }
+    loadUsers();
   }, []);
 
-  // Save users
-  useEffect(() => {
-    localStorage.setItem("users", JSON.stringify(users));
-  }, [users]);
+  const loadUsers = () => {
+    const data = fetchUsers();
+    setUsers(data);
+  };
 
-  // Search
+  // Search Filter
   const filteredUsers = users.filter((user) =>
-    user.name.toLowerCase().includes(search.toLowerCase())
+    user.name.toLowerCase().includes(search.toLowerCase()) ||
+    user.email.toLowerCase().includes(search.toLowerCase()) ||
+    user.role.toLowerCase().includes(search.toLowerCase())
   );
 
   // Add User
@@ -58,36 +58,30 @@ const Users = () => {
   // Close Dialog
   const handleCloseDialog = () => {
     setOpenDialog(false);
+    setEditingUser(null);
   };
 
   // Save User
   const handleSaveUser = (user) => {
-    if (editingUser) {
-      const updatedUsers = users.map((u) =>
-        u.id === editingUser.id
-          ? { ...user, id: editingUser.id }
-          : u
-      );
+    try {
+      if (editingUser) {
+        editUser(editingUser.id, user);
+        toast.success("User Updated Successfully");
+      } else {
+        createUser(user);
+        toast.success("User Added Successfully");
+      }
 
-      setUsers(updatedUsers);
+      loadUsers();
 
-      toast.success("User Updated Successfully");
-    } else {
-      const newUser = {
-        ...user,
-        id: Date.now(),
-      };
-
-      setUsers([...users, newUser]);
-
-      toast.success("User Added Successfully");
+      setOpenDialog(false);
+      setEditingUser(null);
+    } catch (error) {
+      toast.error(error.message || "Something went wrong");
     }
-
-    setOpenDialog(false);
-    setEditingUser(null);
   };
 
-  // Delete Dialog
+  // Open Delete Dialog
   const handleDeleteDialog = (user) => {
     setSelectedUser(user);
     setDeleteDialog(true);
@@ -95,13 +89,13 @@ const Users = () => {
 
   // Delete User
   const handleDeleteUser = () => {
-    const updatedUsers = users.filter(
-      (u) => u.id !== selectedUser.id
-    );
+    if (!selectedUser) return;
 
-    setUsers(updatedUsers);
+    removeUser(selectedUser.id);
 
     toast.success("User Deleted Successfully");
+
+    loadUsers();
 
     setDeleteDialog(false);
     setSelectedUser(null);
@@ -109,11 +103,7 @@ const Users = () => {
 
   return (
     <DashboardLayout>
-      <Typography
-        variant="h4"
-        fontWeight="bold"
-        mb={3}
-      >
+      <Typography variant="h4" fontWeight="bold" mb={3}>
         User Management
       </Typography>
 
@@ -124,9 +114,11 @@ const Users = () => {
       />
 
       <Paper
+        elevation={3}
         sx={{
           p: 2,
-          height: 550,
+          mt: 2,
+          borderRadius: 2,
         }}
       >
         <UserTable
