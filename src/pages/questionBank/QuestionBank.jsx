@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Paper, Typography } from "@mui/material";
 import { toast } from "react-toastify";
-
+import QuestionFilter from "./QuestionFilter";
 import DashboardLayout from "../../layouts/DashboardLayout";
 
 import QuestionToolbar from "../../components/questionBank/QuestionToolbar";
@@ -25,6 +25,17 @@ const QuestionBank = () => {
 
   const [editingQuestion, setEditingQuestion] = useState(null);
 
+  const [filters, setFilters] = useState({
+
+  difficulty: "",
+
+  bloom: "",
+
+  subject: "",
+
+  co: "",
+
+});
   useEffect(() => {
     loadQuestions();
   }, []);
@@ -33,9 +44,48 @@ const QuestionBank = () => {
     setQuestions(getQuestions());
   };
 
-  const filteredQuestions = questions.filter((q) =>
-    q.question.toLowerCase().includes(search.toLowerCase())
+const filteredQuestions = questions.filter((q) => {
+
+  const matchesSearch =
+    q.question
+      .toLowerCase()
+      .includes(search.toLowerCase());
+
+  const matchesDifficulty =
+    !filters.difficulty ||
+    q.difficulty === filters.difficulty;
+
+  const matchesBloom =
+    !filters.bloom ||
+    q.bloom === filters.bloom;
+
+  const matchesSubject =
+    !filters.subject ||
+    q.subject
+      .toLowerCase()
+      .includes(filters.subject.toLowerCase());
+
+  const matchesCO =
+    !filters.co ||
+    q.co
+      .toLowerCase()
+      .includes(filters.co.toLowerCase());
+
+  return (
+
+    matchesSearch &&
+
+    matchesDifficulty &&
+
+    matchesBloom &&
+
+    matchesSubject &&
+
+    matchesCO
+
   );
+
+});
 
   const handleAdd = () => {
     setEditingQuestion(null);
@@ -102,6 +152,14 @@ const QuestionBank = () => {
         setSearch={setSearch}
         onAdd={handleAdd}
       />
+      <QuestionFilter
+
+filters={filters}
+
+setFilters={setFilters}
+
+/>
+
 
       <Paper sx={{ p:2, mt:2 }}>
 

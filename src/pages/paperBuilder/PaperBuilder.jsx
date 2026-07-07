@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import {
   Typography,
@@ -8,6 +9,9 @@ import {
 } from "@mui/material";
 
 import AddIcon from "@mui/icons-material/Add";
+import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
+
+import { toast } from "react-toastify";
 
 import DashboardLayout from "../../layouts/DashboardLayout";
 
@@ -16,7 +20,11 @@ import SectionList from "../../components/paperBuilder/SectionList";
 import SectionDialog from "../../components/paperBuilder/SectionDialog";
 import RuleSummary from "../../components/paperBuilder/RuleSummary";
 
+import { generatePaper } from "../../services/paperGeneratorService";
+
 const PaperBuilder = () => {
+
+  const navigate = useNavigate();
 
   const [paperInfo, setPaperInfo] = useState({
     college: "",
@@ -40,39 +48,37 @@ const PaperBuilder = () => {
 
   const [editingSection, setEditingSection] = useState(null);
 
-  //------------------------
+  //------------------------------------
   // Add Section
-  //------------------------
+  //------------------------------------
 
   const handleAddSection = () => {
     setEditingSection(null);
     setOpenDialog(true);
   };
 
-  //------------------------
+  //------------------------------------
   // Edit Section
-  //------------------------
+  //------------------------------------
 
   const handleEditSection = (section) => {
     setEditingSection(section);
     setOpenDialog(true);
   };
 
-  //------------------------
+  //------------------------------------
   // Delete Section
-  //------------------------
+  //------------------------------------
 
   const handleDeleteSection = (id) => {
-    const updated = sections.filter(
-      (item) => item.id !== id
+    setSections(
+      sections.filter((item) => item.id !== id)
     );
-
-    setSections(updated);
   };
 
-  //------------------------
+  //------------------------------------
   // Duplicate Section
-  //------------------------
+  //------------------------------------
 
   const handleDuplicate = (section) => {
 
@@ -83,11 +89,12 @@ const PaperBuilder = () => {
     };
 
     setSections([...sections, copy]);
+
   };
 
-  //------------------------
+  //------------------------------------
   // Move Up
-  //------------------------
+  //------------------------------------
 
   const moveUp = (index) => {
 
@@ -99,11 +106,12 @@ const PaperBuilder = () => {
       [arr[index - 1], arr[index]];
 
     setSections(arr);
+
   };
 
-  //------------------------
+  //------------------------------------
   // Move Down
-  //------------------------
+  //------------------------------------
 
   const moveDown = (index) => {
 
@@ -116,11 +124,12 @@ const PaperBuilder = () => {
       [arr[index + 1], arr[index]];
 
     setSections(arr);
+
   };
 
-  //------------------------
+  //------------------------------------
   // Save Section
-  //------------------------
+  //------------------------------------
 
   const handleSaveSection = (section) => {
 
@@ -150,8 +159,47 @@ const PaperBuilder = () => {
     }
 
     setEditingSection(null);
-
     setOpenDialog(false);
+
+  };
+
+  //------------------------------------
+  // Generate Paper
+  //------------------------------------
+
+  const handleGeneratePaper = () => {
+
+    if (!paperInfo.subject) {
+
+      toast.error("Please select a Subject");
+
+      return;
+
+    }
+
+    if (sections.length === 0) {
+
+      toast.error("Please add at least one Section");
+
+      return;
+
+    }
+
+    const paper = generatePaper(
+      paperInfo,
+      sections
+    );
+
+    toast.success(
+      "Question Paper Generated Successfully"
+    );
+
+    navigate("/paper-preview", {
+      state: {
+        paper,
+      },
+    });
+
   };
 
   return (
@@ -163,17 +211,14 @@ const PaperBuilder = () => {
         fontWeight="bold"
         mb={3}
       >
-        Paper Template Builder
+        Question Paper Builder
       </Typography>
 
       <Paper sx={{ p: 3, mb: 3 }}>
 
         <PaperInfo
-
           paperInfo={paperInfo}
-
           setPaperInfo={setPaperInfo}
-
         />
 
       </Paper>
@@ -186,9 +231,7 @@ const PaperBuilder = () => {
       >
 
         <Typography variant="h5">
-
-          Sections
-
+          Paper Sections
         </Typography>
 
         <Button
@@ -202,39 +245,44 @@ const PaperBuilder = () => {
       </Box>
 
       <SectionList
-
         sections={sections}
-
         onEdit={handleEditSection}
-
         onDelete={handleDeleteSection}
-
         onDuplicate={handleDuplicate}
-
         onMoveUp={moveUp}
-
         onMoveDown={moveDown}
-
       />
 
       <RuleSummary
-
         paperInfo={paperInfo}
-
         sections={sections}
-
       />
 
+      <Box
+        display="flex"
+        justifyContent="flex-end"
+        mt={3}
+      >
+
+        <Button
+          variant="contained"
+          color="success"
+          size="large"
+          startIcon={<AutoAwesomeIcon />}
+          onClick={handleGeneratePaper}
+        >
+          Generate Question Paper
+        </Button>
+
+      </Box>
+
       <SectionDialog
-
         open={openDialog}
-
         editingSection={editingSection}
-
-        handleClose={() => setOpenDialog(false)}
-
+        handleClose={() =>
+          setOpenDialog(false)
+        }
         onSave={handleSaveSection}
-
       />
 
     </DashboardLayout>

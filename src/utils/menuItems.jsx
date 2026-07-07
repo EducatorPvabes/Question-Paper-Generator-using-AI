@@ -1,10 +1,13 @@
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import PeopleIcon from "@mui/icons-material/People";
+import PersonIcon from "@mui/icons-material/Person";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
+import AutoStoriesIcon from "@mui/icons-material/AutoStories";
 import QuizIcon from "@mui/icons-material/Quiz";
 import DescriptionIcon from "@mui/icons-material/Description";
-import AnalyticsIcon from "@mui/icons-material/Analytics";
-import PersonIcon from "@mui/icons-material/Person";
+import AssessmentIcon from "@mui/icons-material/Assessment";
+import SettingsIcon from "@mui/icons-material/Settings";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 export const menuItems = [
   {
@@ -28,18 +31,33 @@ export const menuItems = [
     icon: <QuizIcon />,
   },
   {
-    title: "Generate Paper",
-    path: "/generate-paper",
+    title: "Paper Builder",
+    path: "/paper-builder",
+    icon: <AutoStoriesIcon />,
+  },
+  {
+    title: "Generated Papers",
+    path: "/generated-papers",
     icon: <DescriptionIcon />,
   },
   {
     title: "Reports",
     path: "/reports",
-    icon: <AnalyticsIcon />,
+    icon: <AssessmentIcon />,
   },
   {
     title: "Profile",
     path: "/profile",
     icon: <PersonIcon />,
+  },
+  {
+    title: "Settings",
+    path: "/settings",
+    icon: <SettingsIcon />,
+  },
+  {
+    title: "Logout",
+    path: "/logout",
+    icon: <LogoutIcon />,
   },
 ];

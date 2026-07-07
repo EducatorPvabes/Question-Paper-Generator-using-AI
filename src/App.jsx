@@ -7,11 +7,11 @@ import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import ForgetPassword from "./pages/auth/ForgetPassword";
 import ResetPassword from "./pages/auth/ResetPassword";
-
+import PaperBuilder from "./pages/paperBuilder/PaperBuilder";
 import Dashboard from "./pages/dashboard/Dashboard";
 import Users from "./pages/users/Users";
 import Profile from "./pages/profile/Profile";
-
+import PaperPreview from "./pages/paperPreview/PaperPreview";
 import NotFound from "./pages/NotFound";
 
 function App() {
@@ -38,6 +38,16 @@ function App() {
           </PublicRoute>
         }
       />
+
+      <Route
+  path="/paper-preview"
+  element={
+    <ProtectedRoute>
+      <PaperPreview />
+    </ProtectedRoute>
+  }
+/>
+
 
       <Route
         path="/forgot-password"
